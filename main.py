@@ -1,5 +1,9 @@
 from bitarray import bitarray
+
+qtd_nucleotideos = 0
+
 def ler_documento():
+    global qtd_nucleotideos
     with open('arquivo.txt', 'r') as arquivo:
         linhas = arquivo.read()
     
@@ -26,7 +30,8 @@ def ler_documento():
         else:
             pass
         
-    
+        qtd_nucleotideos += 1
+        
     return conteudo
 
 def compactar():
@@ -40,7 +45,7 @@ def descompactar():
         resultado = []
         descompactado.fromfile(arquivo)
         atual = 0
-        while atual <= len(descompactado):
+        while atual < len(descompactado):
             if descompactado[atual] == False and descompactado[atual+1] == False:
                 resultado.append('A')
 
@@ -54,17 +59,16 @@ def descompactar():
                 resultado.append('T')
 
             atual += 2
+            
+        resultado = resultado[:qtd_nucleotideos]
 
         with open('descompactado.txt', 'w') as arquivo:
             atual = 0
-            while atual <= len(resultado):
+            while atual < len(resultado):
                 arquivo.write(resultado[atual])
+                if (atual + 1) % 70 == 0:
+                    arquivo.write('\n')
+                atual += 1
 
+compactar()
 descompactar()
-
-
-
-
-
-
-
